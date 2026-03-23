@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Clinic Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b0d0f;
+    --bg2: #111416;
+    --bg3: #181c1f;
+    --border: rgba(255,255,255,0.07);
+    --border-mid: rgba(255,255,255,0.12);
+    --text: #e8e3db;
+    --muted: #7a7670;
+    --accent: #4de8a8;
+    --accent2: #7b6ef6;
+    --warm: #f0c060;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'Outfit', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(11,13,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 3rem;
+    max-width: 900px;
+    padding-top: 6rem;
+  }
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.35s;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.5s;
+  }
+  .hero-ctas {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.65s;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #0b0d0f;
+  }
+  .btn-primary:hover { background: #6ef5be; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-mid);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Divider */
+  .divider {
+    width: 100%; height: 1px;
+    background: var(--border);
+    margin: 0 3rem;
+    max-width: calc(100% - 6rem);
+  }
+
+  /* Section */
+  section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .section-intro {
+    color: var(--muted);
+    max-width: 580px;
+    margin-bottom: 3rem;
+  }
+
+  /* Problem/Solution cards */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border-mid); }
+  .card-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .card-label.problem { color: #e06060; }
+  .card-label.solution { color: var(--accent); }
+  .card h3 {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    margin-bottom: 0.6rem;
+  }
+  .card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+  /* Architecture layers */
+  .layers { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 3rem; }
+  .layer {
+    display: flex; align-items: center; gap: 1.5rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .layer:hover { border-color: var(--border-mid); transform: translateX(4px); }
+  .layer-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 1.5rem;
+  }
+  .layer-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    min-width: 160px;
+  }
+  .layer-desc { font-size: 0.85rem; color: var(--muted); }
+  .layer-tech {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+
+  /* Key decisions table */
+  .decisions { width: 100%; border-collapse: collapse; margin-bottom: 3rem; }
+  .decisions th {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .decisions td {
+    padding: 1rem;
+    font-size: 0.88rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .decisions td:first-child { font-weight: 500; color: var(--accent); font-family: var(--mono); font-size: 12px; }
+  .decisions td:last-child { color: var(--muted); }
+  .decisions tr:hover td { background: var(--bg2); }
+
+  /* Outcomes */
+  .outcomes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+  @media (max-width: 700px) { .outcomes { grid-template-columns: 1fr; } }
+  .outcome {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .outcome-stat {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .outcome-label { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+  /* Tech stack tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-mid);
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* GitHub CTA */
+  .cta-section {
+    padding: 5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .cta-section h2 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 400;
+  }
+  .cta-section p { color: var(--muted); max-width: 480px; }
+
+  /* Footer */
+  footer {
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">clinic-platform</a>
+  <div class="nav-links">
+    <a href="#architecture">Architecture</a>
+    <a href="#deployment">Deployment</a>
+    <a href="#compliance">HIPAA</a>
+    <a href="#github">GitHub</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-label">Case Study — Full-Stack Platform Design</div>
+  <h1>A <em>HIPAA-compliant</em><br>clinic platform,<br>built to scale.</h1>
+  <p class="hero-sub">From architecture to zero-downtime deployments — a complete platform design covering microservices, Kubernetes, blue/green releases, and regulatory audit logging.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-primary" href="#architecture">Explore the design</a>
+    <a class="btn btn-ghost" href="https://github.com/your-username/clinic-platform" target="_blank">View on GitHub</a>
+  </div>
+</div>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="section-label reveal">Architecture</div>
+  <h2 class="section-title reveal">Five layers, clearly separated.</h2>
+  <p class="section-intro reveal">Each layer has a single responsibility. Changes to billing don't touch scheduling. The database namespace is unreachable from the frontend. Every boundary is enforced — not just documented.</p>
+
+  <div class="layers">
+    <div class="layer reveal">
+      <span class="layer-num">01</span>
+      <span class="layer-name">Client layer</span>
+      <span class="layer-desc">Patient portal, staff dashboard, mobile app, admin panel</span>
+      <span class="layer-tech">React</span>
+    </div>
+    <div class="layer reveal">
+      <span class="layer-num">02</span>
+      <span class="layer-name">API gateway</span>
+      <span class="layer-desc">Authentication, routing, rate limiting — single entry point</span>
+      <span class="layer-tech">Kong / AWS API GW</span>
+    </div>
+    <div class="layer reveal">
+      <span class="layer-num">03</span>
+      <span class="layer-name">Core services</span>
+      <span class="layer-desc">Scheduling · EHR/EMR · Billing · Notifications</span>
+      <span class="layer-tech">Node.js microservices</span>
+    </div>
+    <div class="layer reveal">
+      <span class="layer-num">04</span>
+      <span class="layer-name">Data & integrations</span>
+      <span class="layer-desc">RDS · Redis · S3 · Labs (HL7/FHIR) · Payments</span>
+      <span class="layer-tech">AWS managed services</span>
+    </div>
+    <div class="layer reveal">
+      <span class="layer-num">05</span>
+      <span class="layer-name">Infrastructure</span>
+      <span class="layer-desc">Kubernetes · Vault · Grafana · CI/CD pipeline</span>
+      <span class="layer-tech">EKS · ArgoCD</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Deployment -->
+<section id="deployment">
+  <div class="section-label reveal">Deployment</div>
+  <h2 class="section-title reveal">Zero downtime.<br>Sub-30-second rollback.</h2>
+  <p class="section-intro reveal">Blue/green deployments with Kubernetes ingress switching. The new version receives 0% of traffic until health checks pass, then 100% switches instantly. The previous version stays warm.</p>
+
+  <div class="two-col">
+    <div class="card reveal">
+      <div class="card-label problem">The risk</div>
+      <h3>Deployments during clinic hours</h3>
+      <p>A rolling update that takes 5 minutes to complete leaves patients unable to book appointments mid-deployment. A failed release needs a rebuild, not a fast rollback.</p>
+    </div>
+    <div class="card reveal">
+      <div class="card-label solution">The solution</div>
+      <h3>Atomic traffic switching</h3>
+      <p>Green receives no traffic until fully warmed and smoke-tested. One ingress selector update moves all traffic. Blue stays live as immediate fallback for 30 minutes.</p>
+    </div>
+    <div class="card reveal">
+      <div class="card-label problem">The risk</div>
+      <h3>Secrets in environment variables</h3>
+      <p>Credentials baked into pod specs or Docker images are visible in logs, crash dumps, and to anyone with kubectl access.</p>
+    </div>
+    <div class="card reveal">
+      <div class="card-label solution">The solution</div>
+      <h3>Vault sidecar injection</h3>
+      <p>HashiCorp Vault injects credentials at pod startup. Secrets never touch disk, never appear in source code, and every access is audited automatically.</p>
+    </div>
+  </div>
+
+  <h3 class="section-title reveal" style="font-size:1.4rem; margin-bottom:1.5rem;">Key design decisions</h3>
+  <table class="decisions reveal">
+    <thead>
+      <tr><th>Decision</th><th>Rationale</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Blue/green over rolling updates</td><td>Instant rollback is non-negotiable for a patient-facing system</td></tr>
+      <tr><td>Two K8s namespaces</td><td>Network policies enforce pod-level isolation between app and data layers</td></tr>
+      <tr><td>HPA on gateway + services</td><td>Morning appointment rushes require burst capacity without idle over-provisioning</td></tr>
+      <tr><td>GitOps via ArgoCD</td><td>Every production change is a git commit — full history, easy audit, no manual kubectl in prod</td></tr>
+      <tr><td>12-stage CI pipeline</td><td>HIPAA compliance gates run automatically on every PR, not as a periodic audit</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- HIPAA -->
+<section id="compliance">
+  <div class="section-label reveal">HIPAA Compliance</div>
+  <h2 class="section-title reveal">An audit trail that<br>can't be altered.</h2>
+  <p class="section-intro reveal">Every access to patient data produces a structured, immutable log event. Stored in write-once S3 with KMS encryption — tamper-proof even for infrastructure admins.</p>
+
+  <div class="two-col" style="margin-bottom:2rem;">
+    <div class="card reveal">
+      <div class="card-label solution">What's logged</div>
+      <h3>Full access context</h3>
+      <p>user_id · role · patient_id · action · resource · IP address · timestamp · result. Not "record updated" — exactly who, what, which patient, and when.</p>
+    </div>
+    <div class="card reveal">
+      <div class="card-label solution">Where it goes</div>
+      <h3>Two destinations</h3>
+      <p>Real-time SIEM (Splunk/Datadog) for anomaly detection and alerting. S3 Object Lock (WORM) for 6-year immutable retention required by HIPAA.</p>
+    </div>
+  </div>
+
+  <div class="outcomes">
+    <div class="outcome reveal">
+      <div class="outcome-stat">6 yr</div>
+      <div class="outcome-label">Immutable log retention, WORM-enforced on S3</div>
+    </div>
+    <div class="outcome reveal">
+      <div class="outcome-stat">&lt; 30s</div>
+      <div class="outcome-label">Production rollback via single ingress selector update</div>
+    </div>
+    <div class="outcome reveal">
+      <div class="outcome-stat">0</div>
+      <div class="outcome-label">Secrets in source code, env vars, or container images</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Tech stack -->
+<section>
+  <div class="section-label reveal">Tech Stack</div>
+  <h2 class="section-title reveal" style="margin-bottom:1.5rem;">Built with</h2>
+  <div class="tags reveal">
+    <span class="tag">Kubernetes</span>
+    <span class="tag">AWS EKS</span>
+    <span class="tag">ArgoCD</span>
+    <span class="tag">GitHub Actions</span>
+    <span class="tag">HashiCorp Vault</span>
+    <span class="tag">PostgreSQL</span>
+    <span class="tag">Redis</span>
+    <span class="tag">AWS S3</span>
+    <span class="tag">Docker</span>
+    <span class="tag">Fluentd</span>
+    <span class="tag">Kinesis</span>
+    <span class="tag">Splunk</span>
+    <span class="tag">Grafana</span>
+    <span class="tag">Snyk</span>
+    <span class="tag">Trivy</span>
+    <span class="tag">Kong</span>
+    <span class="tag">React</span>
+    <span class="tag">Node.js</span>
+    <span class="tag">HL7 / FHIR</span>
+    <span class="tag">Terraform</span>
+  </div>
+</section>
+
+<!-- GitHub CTA -->
+<div class="cta-section" id="github">
+  <div class="section-label">Open source</div>
+  <h2>Explore the full repo.</h2>
+  <p>Complete repo structure, Kubernetes manifests, CI/CD workflow files, Terraform config, and full documentation — all on GitHub.</p>
+  <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+    <a class="btn btn-primary" href="https://github.com/your-username/clinic-platform" target="_blank">View on GitHub</a>
+    <a class="btn btn-ghost" href="docs/case-study.md" target="_blank">Read the case study</a>
+  </div>
+</div>
+
+<footer>
+  <span>clinic-platform · Full-stack architecture & deployment</span>
+  <span>Built with care for patient data privacy</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 0.08 + 's';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
